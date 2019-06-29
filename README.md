@@ -2,4 +2,18 @@
 
 Se você já usou Vagrant antes, atualize seu box do ubuntu, senão vai dar merda!
 
->vagrant box update
+```markdown
+$ sudo vagrant box update
+```
+
+Beleza, até agora o Prometheus tá funcionando no. Pelo Browser, acesse o IP da VM master definido no Vagrantfile:
+
+```markdown
+192.168.50.2:9090
+```
+
+
+Chique. Próximos passos: 
+- testar acesso da API HTTP do vagrant. 
+- Conectar cadvisor e node-exporter da VM-Worker
+- Desenvolver 1 APP flask se comunicando com a API
