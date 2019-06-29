@@ -17,7 +17,7 @@ Vagrant.configure(2) do |config|
                 vb.name = "master"
         end
         master.vm.provision "shell" do |s|
-            s.path = "./vm-server/vm-server.sh"	
+            s.path = "vm-server/vm-server.sh"	
         end  
     end
 
@@ -31,7 +31,7 @@ Vagrant.configure(2) do |config|
                 vb.name = "worker"
         end
         worker.vm.provision "shell" do |s|
-            s.path = "./vm-client/vm-client.sh"	
+            s.path = "vm-client/vm-client.sh"	
         end  
     end
 end

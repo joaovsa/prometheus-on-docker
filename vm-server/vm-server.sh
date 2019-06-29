@@ -1,6 +1,5 @@
 #!/bin/bash
 #Script para configurar a VM Master
-
 #Instalando o Docker
 sudo apt -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -13,9 +12,10 @@ sudo systemctl enable docker
 sudo apt -y upgrade
 sudo gpasswd -a "${USER}" docker
 
+echo "Iniciando instalacoes..." 
 
 #baixa repositorio e entra na pasta
-git clone https://github.com/joaovsa/prometheus-on-docker
+sudo git clone https://github.com/joaovsa/prometheus-on-docker
 cd prometheus-on-docker/vm-server
 
 #cria imagem docker do prometheus usando Dockerfile
@@ -29,3 +29,5 @@ sudo docker run -d --restart=always --net="host" --pid="host" --publish=9100:910
 
 #inicia container c/ cAdvisor
 sudo docker run --restart=always --volume=/:/rootfs:ro --volume=/var/run:/var/run:ro --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --volume=/dev/disk/:/dev/disk:ro --publish=8080:8080 --detach=true --name=cadvisor google/cadvisor:latest
+
+echo "Containers executando com sucesso!" 
