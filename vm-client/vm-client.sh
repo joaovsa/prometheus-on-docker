@@ -13,6 +13,10 @@ sudo systemctl enable docker
 sudo apt -y upgrade
 sudo gpasswd -a "${USER}" docker
 
+#instalando docker-compose p/ aplicação container <-> container
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
 #baixa repositorio e entra na pasta
 git clone https://github.com/joaovsa/prometheus-on-docker
 cd prometheus-on-docker/vm-client
