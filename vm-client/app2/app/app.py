@@ -6,18 +6,27 @@ import json
 app = Flask(__name__)
 
 
-def favorite_colors() -> List[Dict]:
+def cadvisordb() -> List[Dict]:
     config = {
         'user': 'root',
         'password': 'root',
         'host': 'db',
         'port': '3306',
-        'database': 'knights'
+        'database': 'cadvisordb'
     }
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM favorite_colors')
-    results = [{name: color} for (name, color) in cursor]
+    cursor.execute('SELECT * FROM prometheus')
+    results = [{'timestamp' : timestamp,\
+                'cont_id' : cont_id,\
+                'cont_name' : cont_name,\
+                'cpu_name' : cpu_name,\
+                'cpu_usage' : cpu_usage,\
+                'mem_usage' : mem_usage,\
+                'bytes_rx' : bytes_rx,\
+                'bytes_tx' : bytes_tx} for\
+                (timestamp, cont_id, cont_name, cpu_name,z
+                 cpu_usage,mem_usage,bytes_rx,bytes_tx) in cursor]
     cursor.close()
     connection.close()
 
@@ -26,7 +35,7 @@ def favorite_colors() -> List[Dict]:
 
 @app.route('/')
 def index() -> str:
-    return json.dumps({'favorite_colors': favorite_colors()})
+    return json.dumps({'cadvisor': cadvisordb()})
 
 
 if __name__ == '__main__':
