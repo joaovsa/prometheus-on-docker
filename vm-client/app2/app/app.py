@@ -25,7 +25,7 @@ def cadvisordb() -> List[Dict]:
                 'mem_usage' : mem_usage,\
                 'bytes_rx' : bytes_rx,\
                 'bytes_tx' : bytes_tx} for\
-                (timestamp, cont_id, cont_name, cpu_name,z
+                (timestamp, cont_id, cont_name, cpu_name,\
                  cpu_usage,mem_usage,bytes_rx,bytes_tx) in cursor]
     cursor.close()
     connection.close()
