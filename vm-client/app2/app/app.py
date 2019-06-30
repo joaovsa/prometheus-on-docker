@@ -17,7 +17,8 @@ def cadvisordb() -> List[Dict]:
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM prometheus')
-    results = [{'timestamp' : timestamp,\
+    results = [{'timestamp' : "{}-{}-{} {}:{}:{}".format(\
+                    timestamp.day, timestamp.month, timestamp.year, timestamp.hour, timestamp.minute,timestamp.second),\
                 'cont_id' : cont_id,\
                 'cont_name' : cont_name,\
                 'cpu_name' : cpu_name,\
