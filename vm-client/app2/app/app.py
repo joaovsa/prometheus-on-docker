@@ -1,10 +1,19 @@
 from typing import List, Dict
 from flask import Flask
 import mysql.connector
+import requests
 import json
 
 app = Flask(__name__)
 
+def request_prom():
+    response = requests.get('http://192.168.50.2:9090/api/v1/query',
+         params={'query' : "container_memory_working_set_bytes{name='node-exporter'}"})
+    dictio = response.json()
+    for val in dictio['data']['result']:
+        print('id: {} value: {}'.format(val['metric']['id'], val['value'][0]))
+    result = response.json()
+    return result
 
 def cadvisordb() -> List[Dict]:
     config = {
@@ -36,6 +45,9 @@ def cadvisordb() -> List[Dict]:
 
 @app.route('/')
 def index() -> str:
+    #get jsons from prometheus server
+    return json.dumps({'request' : request_prom()})
+    #dump mysql
     return json.dumps({'cadvisor': cadvisordb()})
 
 
