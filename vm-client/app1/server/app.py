@@ -15,8 +15,8 @@ def get():
 def post():
   try:
     f = request.files['files']
-    f.save(f.filename)
-    return jsonify({'status': 'Yay! You just posted a file.'})
+    f.save(os.path.join(app.config['UPLOAD_FOLDER'], 'tiny-puppy.jpg'))
+    return str('Yay! You just posted a file.')
   except Exception as e:
     return str(e)
 

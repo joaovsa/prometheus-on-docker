@@ -36,7 +36,7 @@ class Client:
         headers = {'Content-Type': 'image/jpeg',}
         post = requests.post(url=url, files=files)
 
-        return post.json()
+        return post.text
 
 
 if __name__ == '__main__':
