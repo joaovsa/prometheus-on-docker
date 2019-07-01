@@ -9,9 +9,22 @@ SERVICES = ['app2_app_1', 'app2_db_1', 'cadvisor', 'node-exporter', 'prometheus'
 app = Flask(__name__)
 
 def request_cpu(vec_dicts):
+    #carrega os segundos totals de cpu idle
+    cpu_dict = {}
+    response = requests.get('http://192.168.50.2:9090/api/v1/query',
+         params={'query' : "node_memory_MemAvailable_bytes"})
+    resp_dict = response.json()
+    for resp in resp_dict['data']['result']:
+        ip = resp['metric']['instance'].split(':')[0]+':8080' 
+        #ja mapeia a porta do container configurado
+        cpu_dict[ip] = resp['value'][1]
+    
+    for item in cpu_dict.items():
+        print(item)
+
     #fills container name, container ID and cpu %
     response = requests.get('http://192.168.50.2:9090/api/v1/query',
-         params={'query' : "rate(container_cpu_usage_seconds_total[5m]) * 100"})
+         params={'query' : "container_cpu_usage_seconds_total"})
     resp_dict = response.json()
 
     #for each result fills the dict with curresponding name and ID.
@@ -23,11 +36,10 @@ def request_cpu(vec_dicts):
                 d['cont_id'] = resp['metric']['id']
                 d['cont_name'] = resp['metric']['name']
                 d['cpu_name'] = resp['metric']['cpu']
-                d['cpu_usage'] = resp['value'][1]
+                d['cpu_usage'] = '{:.7f}'.format(float(resp['value'][1]) / float(cpu_dict[resp['metric']['instance']]) * 100)
                 vec_dicts.append(d)
         except:
             pass 
-    
     
 
 def request_prom():
