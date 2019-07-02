@@ -123,11 +123,11 @@ def cadvisordb(insertions) -> List[Dict]:
     for ins in insertions:
         val.append(tuple(ins.values()))
 
-    mycursor.executemany(sql, val)
+    cursor.executemany(sql, val)
 
-    mydb.commit()
+    connection.commit()
 
-    print(mycursor.rowcount, "was inserted.") 
+    print(cursor.rowcount, "was inserted.") 
 
 
 
