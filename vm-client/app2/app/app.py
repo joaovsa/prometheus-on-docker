@@ -2,7 +2,6 @@ from typing import List, Dict
 from flask import Flask
 import mysql.connector
 from mysql.connector import MySQLConnection, Error
-from python_mysql_dbconfig import read_db_config 
 import requests
 import json
 
