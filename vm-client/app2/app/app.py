@@ -119,11 +119,12 @@ def cadvisordb(insertions) -> List[Dict]:
 
 
     sql = "INSERT INTO prometheus (cont_id, cont_name, cpu_name, cpu_usage, mem_usage, bytes_rx, bytes_tx) VALUES (%s, %s,%s, %s,%s, %s,%s)"
-    val = []
-    for ins in insertions:
-        print(tuple(ins.values()))
+    val = [('dummy-container', 'cont_name', 'cpu_name', '47.212', '22.2', '123', '321'),
+    ('dummy-container', 'cont_name', 'cpu_name', '47.212', '22.2', '123', '321'),
+    ('dummy-container', 'cont_name', 'cpu_name', '47.212', '22.2', '123', '321')]
+    """ for ins in insertions:
         val.append(tuple(ins.values()))
-    
+     """
     cursor.executemany(sql, val)
     connection.commit()
     print(cursor.rowcount, "was inserted.") 
