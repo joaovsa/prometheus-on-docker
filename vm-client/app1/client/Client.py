@@ -2,7 +2,7 @@ from flask import request
 import requests
 import json
 
-SERVER_URL = 'http://localhost:5001'
+SERVER_URL = 'http://192.168.50.3:5001'
 
 class Client:
     def menu(self):
