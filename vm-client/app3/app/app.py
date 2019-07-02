@@ -58,13 +58,13 @@ def machines() -> List[Dict]:
     cursor.execute('SELECT * FROM prometheus')
     results = [{'timestamp' : "{}-{}-{} {}:{}:{}".format(\
                     timestamp.day, timestamp.month, timestamp.year, timestamp.hour, timestamp.minute,timestamp.second),\
-                'name' : name,\
+                'nome' : nome,\
                 'cpu_usage' : cpu_usage,\
                 'mem_usage' : mem_usage,\
                 'bytes_rx' : bytes_rx,\
                 'bytes_tx' : bytes_tx,\
                 'source' : source} for\
-                (timestamp, name, cpu_usage,mem_usage,bytes_rx,bytes_tx, source) in cursor]
+                (timestamp, nome, cpu_usage,mem_usage,bytes_rx,bytes_tx, source) in cursor]
     cursor.close()
     connection.close()
 
