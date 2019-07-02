@@ -1,6 +1,4 @@
-# prometheus-on-docker
-
-### Trabalho Final: Prometheus
+# Trabalho Final: Prometheus
 
 Com o `git` e o `vagrant` instalados, siga os passos a seguir:
 
@@ -9,7 +7,7 @@ Com o `git` e o `vagrant` instalados, siga os passos a seguir:
 Se você já usou Vagrant antes, atualize seu box do ubuntu para não dar erro
 
 ```markdown
-\$ sudo vagrant box update
+$ sudo vagrant box update
 ```
 
 ### Passo 2
@@ -25,7 +23,7 @@ Você pode acessar o Prometheus pelo IP da VM master definido no Vagrantfile:
 Inicie as VMs usando o Vagrantfile
 
 ```markdown
-\$ vagrant up
+$ vagrant up
 ```
 
 ### Passo 4
@@ -42,7 +40,7 @@ $ vagrant ssh worker
 Na VM worker, você pode listar as imagens docker
 
 ```markdown
-\$ docker images
+$ docker images
 ```
 
 ### Passo 6
@@ -50,7 +48,7 @@ Na VM worker, você pode listar as imagens docker
 Iniciando a aplicação client do APP1
 
 ```markdown
-\$ docker run -it app1/client
+$ docker run -it app1/client
 ```
 
 ### Passo 7
