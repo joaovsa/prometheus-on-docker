@@ -29,7 +29,7 @@ def insertdb(argtuple):
         user= 'root',\
         password= 'root',\
         host='db3',\
-        port= '3307',\
+        port= '3306',\
         database='machines')  
 
     query = "INSERT INTO prometheus(name, cpu_usage, mem_usage, bytes_rx, bytes_tx, source) " \
@@ -52,7 +52,7 @@ def machines() -> List[Dict]:
     user= 'root',\
     password= 'root',\
     host='db3',\
-    port= '3307',\
+    port= '3306',\
     database='machines')
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM prometheus')
