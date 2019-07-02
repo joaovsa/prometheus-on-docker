@@ -39,8 +39,8 @@ def insertdb(argtuple):
         cursor = connection.cursor()
         cursor.execute(query, argtuple) 
         connection.commit()
-    except :
-        pass
+    except Exception as e:
+        print(__str(e)__)
  
     finally:
         cursor.close()
@@ -59,13 +59,12 @@ def machines() -> List[Dict]:
     results = [{'timestamp' : "{}-{}-{} {}:{}:{}".format(\
                     timestamp.day, timestamp.month, timestamp.year, timestamp.hour, timestamp.minute,timestamp.second),\
                 'name' : name,\
-                'cpu_name' : cpu_name,\
                 'cpu_usage' : cpu_usage,\
                 'mem_usage' : mem_usage,\
                 'bytes_rx' : bytes_rx,\
                 'bytes_tx' : bytes_tx,\
                 'source' : source} for\
-                (timestamp, name, cpu_name,\
+                (timestamp, name,\
                  cpu_usage,mem_usage,bytes_rx,bytes_tx, source) in cursor]
     cursor.close()
     connection.close()
