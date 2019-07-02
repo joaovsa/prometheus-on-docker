@@ -131,12 +131,12 @@ def insertdb(argtuple):
 
 def cadvisordb() -> List[Dict]:
     #insere e consulta base
-       connection = mysql.connector.connect(\
-        user= 'root',\
-        password= 'root',\
-        host='db',\
-        port= '3306',\
-        database='cadvisordb')
+    connection = mysql.connector.connect(\
+    user= 'root',\
+    password= 'root',\
+    host='db',\
+    port= '3306',\
+    database='cadvisordb')
     cursor = mySQLconnection.cursor()
     cursor.execute('SELECT * FROM prometheus')
     results = [{'timestamp' : "{}-{}-{} {}:{}:{}".format(\
