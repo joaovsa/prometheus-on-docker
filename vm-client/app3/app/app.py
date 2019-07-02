@@ -78,7 +78,7 @@ def index() -> str:
     #get jsons from prometheus server
     insertions = []    
     request_prom(insertions)    
-    insertdb( ('dummy-machine', 'cpu_name', '47.212', '22.2', '123', '321', 'sponge-bob'))
+    insertdb( ('dummy-machine', '47.212', '22.2', '123', '321', 'sponge-bob'))
     #dump mysql
     return json.dumps({'machines': machines()})
 
