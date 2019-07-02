@@ -77,6 +77,8 @@ def index() -> str:
     insertions = []    
     request_prom(insertions)    
     insertdb( ('dummy-machine', '47.212', '22.2', '123', '321', 'sponge-bob'))
+    for ins in insertions:
+        insertdb(tuple(ins.values()))
     #dump mysql
     return json.dumps({'machines': machines()})
 
