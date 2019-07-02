@@ -107,29 +107,28 @@ def request_prom(insertions):
     for ins in insertions:
         print("id: {} name: {} cpu: {} mem:{} rx:{} tx{}".format(ins['cont_id'], ins['cont_name'], ins['cpu_usage'], ins['mem_usage'], ins['bytes_rx'], ins['bytes_tx']))
 
-def insertdb(tuple):    
+def insertdb(argtuple):    
+     connection = mysql.connector.connect{
+        'user': 'root',
+        'password': 'root',
+        'host': 'db',
+        'port': '3306',
+        'database': 'cadvisordb'
+    }    
+
     query = "INSERT INTO prometheus(cont_id, cont_name, cpu_name, cpu_usage, mem_usage, bytes_rx, bytes_tx) " \
             "VALUES(%s,%s,%s,%s,%s,%s,%s)"    
  
     try:
-        db_config = read_db_config()
-        conn = MySQLConnection(**db_config)
- 
-        cursor = conn.cursor()
-        cursor.execute(query, tuple)
- 
-        if cursor.lastrowid:
-            print('last insert id', cursor.lastrowid)
-        else:
-            print('last insert id not found')
- 
-        conn.commit()
+        cursor = connection.cursor()
+        cursor.execute(query, argtuple) 
+        connection.commit()
     except Error as error:
         print(error)
  
     finally:
         cursor.close()
-        conn.close()
+        connection.close()
 
 def cadvisordb() -> List[Dict]:
     #insere e consulta base
@@ -140,7 +139,7 @@ def cadvisordb() -> List[Dict]:
         'port': '3306',
         'database': 'cadvisordb'
     }    
-    cursor = connection.cursor(prepared=true)
+    cursor = mySQLconnection .cursor() 
     cursor.execute('SELECT * FROM prometheus')
     results = [{'timestamp' : "{}-{}-{} {}:{}:{}".format(\
                     timestamp.day, timestamp.month, timestamp.year, timestamp.hour, timestamp.minute,timestamp.second),\
@@ -164,7 +163,7 @@ def index() -> str:
     #get jsons from prometheus server
     insertions = []    
     request_prom(insertions)
-    insertdb( ('dummy-container', 'cont_name', 'cpu_name', '47.212', '22.2', '123', '321'))
+    insertdb( ('BIG FAT FLYIONG DONGER', 'cont_name', 'cpu_name', '47.212', '22.2', '123', '321'))
     #dump mysql
     return json.dumps({'cadvisor': cadvisordb()})
 

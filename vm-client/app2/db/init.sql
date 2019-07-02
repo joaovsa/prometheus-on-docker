@@ -7,10 +7,10 @@ CREATE TABLE prometheus (
     cont_id VARCHAR(200) DEFAULT 'no-id',
     cont_name VARCHAR(20) DEFAULT 'no-name',
     cpu_name VARCHAR(10) DEFAULT 'cpu-none',
-    cpu_usage VARCHAR(20) DEFAULT 0,
-    mem_usage VARCHAR(20) DEFAULT 0,
-    bytes_rx VARCHAR(40) DEFAULT 0,
-    bytes_tx VARCHAR(30) DEFAULT 0
+    cpu_usage VARCHAR(20) DEFAULT '0',
+    mem_usage VARCHAR(20) DEFAULT '0',
+    bytes_rx VARCHAR(40) DEFAULT '0',
+    bytes_tx VARCHAR(30) DEFAULT '0'
 );
 
 INSERT INTO prometheus
