@@ -1,6 +1,8 @@
 from typing import List, Dict
 from flask import Flask
 import mysql.connector
+from mysql.connector import MySQLConnection, Error
+from python_mysql_dbconfig import read_db_config 
 import requests
 import json
 
@@ -105,32 +107,40 @@ def request_prom(insertions):
     for ins in insertions:
         print("id: {} name: {} cpu: {} mem:{} rx:{} tx{}".format(ins['cont_id'], ins['cont_name'], ins['cpu_usage'], ins['mem_usage'], ins['bytes_rx'], ins['bytes_tx']))
 
-def cadvisordb(insertions) -> List[Dict]:
+def insertdb(tuple):    
+    query = "INSERT INTO prometheus(cont_id, cont_name, cpu_name, cpu_usage, mem_usage, bytes_rx, bytes_tx) " \
+            "VALUES(%s,%s,%s,%s,%s,%s,%s)"    
+ 
+    try:
+        db_config = read_db_config()
+        conn = MySQLConnection(**db_config)
+ 
+        cursor = conn.cursor()
+        cursor.execute(query, tuple)
+ 
+        if cursor.lastrowid:
+            print('last insert id', cursor.lastrowid)
+        else:
+            print('last insert id not found')
+ 
+        conn.commit()
+    except Error as error:
+        print(error)
+ 
+    finally:
+        cursor.close()
+        conn.close()
+
+def cadvisordb() -> List[Dict]:
     #insere e consulta base
-    config = {
+       connection = mysql.connector.connect{
         'user': 'root',
         'password': 'root',
         'host': 'db',
         'port': '3306',
         'database': 'cadvisordb'
-    }
-    connection = mysql.connector.connect(**config)
-    cursor = connection.cursor()
-
-
-    sql = "INSERT INTO prometheus (cont_id, cont_name, cpu_name, cpu_usage, mem_usage, bytes_rx, bytes_tx) VALUES (%s, %s,%s, %s,%s, %s,%s)"
-    val = [('dummy-container', 'cont_name', 'cpu_name', '47.212', '22.2', '123', '321'),
-    ('dummy-container', 'cont_name', 'cpu_name', '47.212', '22.2', '123', '321'),
-    ('dummy-container', 'cont_name', 'cpu_name', '47.212', '22.2', '123', '321')]
-    """ for ins in insertions:
-        val.append(tuple(ins.values()))
-     """
-    cursor.executemany(sql, val)
-    connection.commit()
-    print(cursor.rowcount, "was inserted.") 
-
-
-
+    }    
+    cursor = connection.cursor(prepared=true)
     cursor.execute('SELECT * FROM prometheus')
     results = [{'timestamp' : "{}-{}-{} {}:{}:{}".format(\
                     timestamp.day, timestamp.month, timestamp.year, timestamp.hour, timestamp.minute,timestamp.second),\
@@ -154,8 +164,9 @@ def index() -> str:
     #get jsons from prometheus server
     insertions = []    
     request_prom(insertions)
+    insertdb( ('dummy-container', 'cont_name', 'cpu_name', '47.212', '22.2', '123', '321'))
     #dump mysql
-    return json.dumps({'cadvisor': cadvisordb(insertions)})
+    return json.dumps({'cadvisor': cadvisordb()})
 
 
 if __name__ == '__main__':
