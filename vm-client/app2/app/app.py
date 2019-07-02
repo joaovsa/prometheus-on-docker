@@ -49,8 +49,8 @@ def request_mem(vec_dicts):
         #ja mapeia a porta do container configurado
         mem_dict[ip] = resp['value'][1]
     
-    for item in mem_dict.items():
-        print(item)
+    """ for item in mem_dict.items():
+        print(item) """
         
      #fills container name, container ID and cpu %
     response = requests.get('http://192.168.50.2:9090/api/v1/query',
@@ -77,7 +77,7 @@ def request_rx(vec_dicts):
     for resp in resp_dict['data']['result']:
         try:
             for i, d in enumerate(vec_dicts):
-                print('metric id {} cont id {}'.format(resp['metric']['id'],d['cont_id']))
+                #print('metric id {} cont id {}'.format(resp['metric']['id'],d['cont_id']))
                 if resp['metric']['id'] == d['cont_id']:                   
                     vec_dicts[i]['bytes_rx'] = resp['value'][1]                    
         except:
@@ -90,7 +90,7 @@ def request_tx(vec_dicts):
     for resp in resp_dict['data']['result']:
         try:
             for i, d in enumerate(vec_dicts):
-                print('metric id {} cont id {}'.format(resp['metric']['id'],d['cont_id']))
+                #print('metric id {} cont id {}'.format(resp['metric']['id'],d['cont_id']))
                 if resp['metric']['id'] == d['cont_id']:                   
                     vec_dicts[i]['bytes_tx'] = resp['value'][1]                    
         except:
@@ -159,7 +159,8 @@ def index() -> str:
     #get jsons from prometheus server
     insertions = []    
     request_prom(insertions)
-    insertdb( ('BIG FAT FLYIONG DONGER', 'cont_name', 'cpu_name', '47.212', '22.2', '123', '321'))
+    for ins in insertions:
+        insertdb(tuple(ins.values()))
     #dump mysql
     return json.dumps({'cadvisor': cadvisordb()})
 
