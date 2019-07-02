@@ -32,7 +32,7 @@ def insertdb(argtuple):
         port= '3306',\
         database='machines')  
 
-    query = "INSERT INTO prometheus(name, cpu_usage, mem_usage, bytes_rx, bytes_tx, source) " \
+    query = "INSERT INTO prometheus(nome, cpu_usage, mem_usage, bytes_rx, bytes_tx, source) " \
             "VALUES(%s,%s,%s,%s,%s,%s)"    
  
     try:
