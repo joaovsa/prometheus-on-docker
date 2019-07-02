@@ -125,7 +125,7 @@ def cadvisordb(insertions) -> List[Dict]:
 
     cursor.executemany(sql, val)
 
-    connection.commit()
+    config.commit()
 
     print(cursor.rowcount, "was inserted.") 
 
