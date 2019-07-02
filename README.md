@@ -1,5 +1,7 @@
 # Trabalho Final: Prometheus
 
+![Projeto macro](projeto.jpg?raw=true "Projeto macro")
+
 Com o `git` e o `vagrant` instalados, siga os passos a seguir:
 
 ### Passo 1
@@ -80,13 +82,13 @@ No navegador, acesse o IP `192.168.50.3:5001` para verificar que agora existe o 
 Para construir a imagem do APP2 é necessário primeiro entrar na pasta
 
 ```markdown
-cd prometheus-on-docker/vm-client/app2
+$ cd prometheus-on-docker/vm-client/app2
 ```
 
 E em seguida, construir a imagem
 
 ```markdown
-sudo docker-compose build --no-cache
+$ sudo docker-compose build --no-cache
 ```
 
 ### Passo 11
@@ -94,7 +96,7 @@ sudo docker-compose build --no-cache
 Iniciando o APP2:
 
 ```markdown
-sudo docker-compose up &
+$ sudo docker-compose up &
 ```
 
 ### Passo 12
@@ -110,7 +112,7 @@ curl http://0.0.0.0:5000 -o out.json
 Para verificar que tudo ocorreu conforme o esperado, podemos abrir o arquivo `out.json` e ver as informações que foram salvas
 
 ```markdown
-sudo nano out.json
+$ sudo nano out.json
 ```
 
 ### Passo 14
@@ -118,13 +120,13 @@ sudo nano out.json
 Para construir a imagem do APP3 é necessário primeiro entrar na pasta
 
 ```markdown
-cd ../app3
+$ cd ../app3
 ```
 
 E em seguida, construir a imagem
 
 ```markdown
-sudo docker-compose build --no-cache
+$ sudo docker-compose build --no-cache
 ```
 
 ### Passo 15
@@ -132,7 +134,7 @@ sudo docker-compose build --no-cache
 Iniciando o APP3:
 
 ```markdown
-sudo docker-compose up &
+$ sudo docker-compose up &
 ```
 
 ### Passo 16
@@ -140,7 +142,7 @@ sudo docker-compose up &
 Fazemos uma requisição para o APP3, onde é realizada uma requisição para a API do Prometheus que retorna as informações da VM e salva em um arquivo JSON.
 
 ```markdown
-curl http://0.0.0.0:5002 -o out.json
+$ curl http://0.0.0.0:5002 -o out.json
 ```
 
 ### Passo 17
@@ -148,9 +150,18 @@ curl http://0.0.0.0:5002 -o out.json
 Para verificar que tudo ocorreu conforme o esperado, podemos abrir o arquivo `out.json` e ver as informações que foram salvas
 
 ```markdown
-sudo nano out.json
+$ sudo nano out.json
 ```
 
 ### Considerações e dificuldades
 
-Este trabalho contribuiu imensamente com o nosso entendimento de criação de ambientes virtuais e conteinerização através do Vagrant e do Docker. Através dele conseguimos entender melhor o passo a passo de criação de um ambiente virtual e de aplicações que rodem dentro de containers.
+Este trabalho contribuiu imensamente com o nosso entendimento de criação de ambientes virtuais, conteinerização e monitoramento através do Vagrant, Docker e Prometheus. Através dele conseguimos entender melhor o passo a passo de criação de um ambiente virtual, de aplicações que rodem dentro de containers e como monitorá-las.
+
+Nossas principais dificuldades foram:
+
+- Entender o conceito de container
+- Entender o porquê de cada aplicação estar em um container
+- Como mapear as portas do container para a máquina hospedeira
+- Como as aplicações são monitoradas
+
+Também tivemos dificuldade para forçar o `docker-compose up` para não reutilizar coisas cacheadas. Estávamos usando a flag `--no-recreate`, que na verdade faz o oposto do que queríamos, a flag correta era `--no-cache`.
