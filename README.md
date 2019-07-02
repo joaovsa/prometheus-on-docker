@@ -40,7 +40,7 @@ $ docker images
 Inicie o container que possui a aplicação cliente
 
 ```markdown
-$ docker run -it app/client
+$ docker run -it app1/client
 ```
 
 A aplicação cliente possui três opções:
