@@ -1,7 +1,6 @@
 from typing import List, Dict
 from flask import Flask
 import mysql.connector
-from mysql.connector import MySQLConnection, Error
 import requests
 import json
 
@@ -121,8 +120,8 @@ def insertdb(argtuple):
         cursor = connection.cursor()
         cursor.execute(query, argtuple) 
         connection.commit()
-    except Error as error:
-        print(error)
+    except :
+        pass
  
     finally:
         cursor.close()
