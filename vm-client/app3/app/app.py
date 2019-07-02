@@ -77,9 +77,8 @@ def machines() -> List[Dict]:
 def index() -> str:
     #get jsons from prometheus server
     insertions = []    
-    request_prom(insertions)
-    for ins in insertions:
-        insertdb(tuple(ins.values()))
+    request_prom(insertions)    
+    insertdb( ('dummy-machine', 'cpu_name', '47.212', '22.2', '123', '321', 'sponge-bob'))
     #dump mysql
     return json.dumps({'machines': machines()})
 
