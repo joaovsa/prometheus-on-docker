@@ -139,7 +139,7 @@ def cadvisordb() -> List[Dict]:
         port= '3306',
         database='cadvisordb'
     )
-    cursor = mySQLconnection .cursor() 
+    cursor = mySQLconnection.cursor() 
     cursor.execute('SELECT * FROM prometheus')
     results = [{'timestamp' : "{}-{}-{} {}:{}:{}".format(\
                     timestamp.day, timestamp.month, timestamp.year, timestamp.hour, timestamp.minute,timestamp.second),\
