@@ -108,13 +108,12 @@ def request_prom(insertions):
         print("id: {} name: {} cpu: {} mem:{} rx:{} tx{}".format(ins['cont_id'], ins['cont_name'], ins['cpu_usage'], ins['mem_usage'], ins['bytes_rx'], ins['bytes_tx']))
 
 def insertdb(argtuple):    
-    connection = mysql.connector.connect(
-        user= 'root',
-        password= 'root',
-        host='db',
-        port= '3306',
-        database='cadvisordb'
-    )  
+    connection = mysql.connector.connect(\
+        user= 'root',\
+        password= 'root',\
+        host='db',\
+        port= '3306',\
+        database='cadvisordb')  
 
     query = "INSERT INTO prometheus(cont_id, cont_name, cpu_name, cpu_usage, mem_usage, bytes_rx, bytes_tx) " \
             "VALUES(%s,%s,%s,%s,%s,%s,%s)"    
@@ -132,14 +131,13 @@ def insertdb(argtuple):
 
 def cadvisordb() -> List[Dict]:
     #insere e consulta base
-       connection = mysql.connector.connect(
-        user= 'root',
-        password= 'root',
-        host='db',
-        port= '3306',
-        database='cadvisordb'
-    )
-    cursor = mySQLconnection.cursor() 
+       connection = mysql.connector.connect(\
+        user= 'root',\
+        password= 'root',\
+        host='db',\
+        port= '3306',\
+        database='cadvisordb')
+    cursor = mySQLconnection.cursor()
     cursor.execute('SELECT * FROM prometheus')
     results = [{'timestamp' : "{}-{}-{} {}:{}:{}".format(\
                     timestamp.day, timestamp.month, timestamp.year, timestamp.hour, timestamp.minute,timestamp.second),\
