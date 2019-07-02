@@ -107,15 +107,14 @@ def request_prom(insertions):
 
 def cadvisordb(insertions) -> List[Dict]:
     #insere e consulta base
-    config = {
+       connection = mysql.connector.connect{
         'user': 'root',
         'password': 'root',
         'host': 'db',
         'port': '3306',
         'database': 'cadvisordb'
-    }
-    connection = mysql.connector.connect(**config)
-    cursor = connection.cursor()
+    }    
+    cursor = connection.cursor(prepared=true)
 
 
     sql = "INSERT INTO prometheus (cont_id, cont_name, cpu_name, cpu_usage, mem_usage, bytes_rx, bytes_tx) VALUES (%s, %s,%s, %s,%s, %s,%s)"
@@ -125,7 +124,7 @@ def cadvisordb(insertions) -> List[Dict]:
     """ for ins in insertions:
         val.append(tuple(ins.values()))
      """
-    cursor.executemany(sql, val)
+    r = cursor.executemany(sql, val)
     connection.commit()
     print(cursor.rowcount, "was inserted.") 
 
