@@ -101,9 +101,9 @@ def request_prom(insertions):
     request_mem(insertions)
     request_rx(insertions)
     request_tx(insertions)
-    #debug purps
+    """ #debug purps
     for ins in insertions:
-        print("id: {} name: {} cpu: {} mem:{} rx:{} tx{}".format(ins['cont_id'], ins['cont_name'], ins['cpu_usage'], ins['mem_usage'], ins['bytes_rx'], ins['bytes_tx']))
+        print("id: {} name: {} cpu: {} mem:{} rx:{} tx{}".format(ins['cont_id'], ins['cont_name'], ins['cpu_usage'], ins['mem_usage'], ins['bytes_rx'], ins['bytes_tx'])) """
 
 def insertdb(argtuple):    
     connection = mysql.connector.connect(\
@@ -135,7 +135,7 @@ def cadvisordb() -> List[Dict]:
     host='db',\
     port= '3306',\
     database='cadvisordb')
-    cursor = mySQLconnection.cursor()
+    cursor = connection.cursor()
     cursor.execute('SELECT * FROM prometheus')
     results = [{'timestamp' : "{}-{}-{} {}:{}:{}".format(\
                     timestamp.day, timestamp.month, timestamp.year, timestamp.hour, timestamp.minute,timestamp.second),\
