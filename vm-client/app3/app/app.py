@@ -64,7 +64,7 @@ def machines() -> List[Dict]:
                 'bytes_rx' : bytes_rx,\
                 'bytes_tx' : bytes_tx,\
                 'source' : source} for\
-                (timestamp, nome, cpu_usage,mem_usage,bytes_rx,bytes_tx, source) in cursor]
+                (timestamp, nome, cpu_usage, mem_usage, bytes_rx, bytes_tx, source) in cursor]
     cursor.close()
     connection.close()
 
