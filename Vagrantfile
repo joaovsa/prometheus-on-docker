@@ -34,6 +34,6 @@ Vagrant.configure(2) do |config|
             s.path = "vm-client/vm-client.sh"	
         end  
         worker.vm.provision "shell", inline: "cd prometheus-on-docker/vm-client/app1/client && sudo docker build -t app1/client ."
-        worker.vm.provision "shell", inline: "cd prometheus-on-docker/vm-client/app1/server && sudo docker build -t app1/server ."
+        worker.vm.provision "shell", inline: "cd prometheus-on-docker/vm-client/app1/server && sudo docker build -t app1/server . && sudo docker run -p 5001:5001 -d app1/server"
     end
 end
