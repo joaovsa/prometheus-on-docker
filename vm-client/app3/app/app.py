@@ -40,7 +40,7 @@ def insertdb(argtuple):
         cursor.execute(query, argtuple) 
         connection.commit()
     except Exception as e:
-        print(__str(e)__)
+        print(e)
  
     finally:
         cursor.close()
