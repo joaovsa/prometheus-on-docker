@@ -1,6 +1,6 @@
 from typing import List, Dict
 from flask import Flask
-#import mysql.connector
+import mysql.connector
 import requests
 import json
 
@@ -12,15 +12,12 @@ def request_cpu(vec_dicts):
     #carrega os segundos totals de cpu idle
     cpu_dict = {}
     response = requests.get('http://192.168.50.2:9090/api/v1/query',
-         params={'query' : "node_memory_MemAvailable_bytes"})
+         params={'query' : "node_cpu_seconds_total{mode='idle'}"})
     resp_dict = response.json()
     for resp in resp_dict['data']['result']:
         ip = resp['metric']['instance'].split(':')[0]+':8080' 
         #ja mapeia a porta do container configurado
         cpu_dict[ip] = resp['value'][1]
-    
-    for item in cpu_dict.items():
-        print(item)
 
     #fills container name, container ID and cpu %
     response = requests.get('http://192.168.50.2:9090/api/v1/query',
@@ -41,22 +38,75 @@ def request_cpu(vec_dicts):
         except:
             pass 
     
+def request_mem(vec_dicts):    
+    #carrega os segundos totals de cpu idle
+    mem_dict = {}
+    response = requests.get('http://192.168.50.2:9090/api/v1/query',
+         params={'query' : "node_memory_MemTotal_bytes"})
+    resp_dict = response.json()
+    for resp in resp_dict['data']['result']:
+        ip = resp['metric']['instance'].split(':')[0]+':8080' 
+        #ja mapeia a porta do container configurado
+        mem_dict[ip] = resp['value'][1]
+    
+    for item in mem_dict.items():
+        print(item)
+        
+     #fills container name, container ID and cpu %
+    response = requests.get('http://192.168.50.2:9090/api/v1/query',
+         params={'query' : "container_memory_usage_bytes"})
+    resp_dict = response.json()
 
-def request_prom():
-    insertions = []    
-    """response = requests.get('http://192.168.50.2:9090/api/v1/query',
-         params={'query' : "container_memory_working_set_bytes{name='node-exporter'}"})
-    dictio = response.json()
-    for val in dictio['data']['result']:
-        print('id: {} value: {}'.format(val['metric']['id'], val['value'][0]))
-    result = response.json()
-    return result"""
+    #for each result fills the dict with curresponding name and ID.
+    #ignores nom named SERVICES for class example simplicity
+    for resp in resp_dict['data']['result']:
+        try:
+            for i, d in enumerate(vec_dicts):
+                if resp['metric']['id'] == d['cont_id']:                   
+                    vec_dicts[i]['mem_usage'] = '{:.7f}'.format(float(resp['value'][1]) / float(mem_dict[resp['metric']['instance']]) * 100)
+                    
+        except:
+            pass 
+
+
+def request_rx(vec_dicts):    
+    response = requests.get('http://192.168.50.2:9090/api/v1/query',
+         params={'query' : "container_network_receive_packets_total"})
+    resp_dict = response.json()
+    #for each result fills the dict with curresponding 
+    for resp in resp_dict['data']['result']:
+        try:
+            for i, d in enumerate(vec_dicts):
+                print('metric id {} cont id {}'.format(resp['metric']['id'],d['cont_id']))
+                if resp['metric']['id'] == d['cont_id']:                   
+                    vec_dicts[i]['bytes_rx'] = resp['value'][1]                    
+        except:
+            pass 
+def request_tx(vec_dicts):    
+    response = requests.get('http://192.168.50.2:9090/api/v1/query',
+         params={'query' : "container_network_transmit_packets_total"})
+    resp_dict = response.json()
+    #for each result fills the dict with curresponding 
+    for resp in resp_dict['data']['result']:
+        try:
+            for i, d in enumerate(vec_dicts):
+                print('metric id {} cont id {}'.format(resp['metric']['id'],d['cont_id']))
+                if resp['metric']['id'] == d['cont_id']:                   
+                    vec_dicts[i]['bytes_tx'] = resp['value'][1]                    
+        except:
+            pass 
+
+def request_prom(insertions):    
     request_cpu(insertions)
+    request_mem(insertions)
+    request_rx(insertions)
+    request_tx(insertions)
     #debug purps
     for ins in insertions:
-        print("id: {} name: {} cpu: {}".format(ins['cont_id'], ins['cont_name'], ins['cpu_usage']))
+        print("id: {} name: {} cpu: {} mem:{} rx:{} tx{}".format(ins['cont_id'], ins['cont_name'], ins['cpu_usage'], ins['mem_usage'], ins['bytes_rx'], ins['bytes_tx']))
 
-""" def cadvisordb() -> List[Dict]:
+def cadvisordb(insertions) -> List[Dict]:
+    #insere e consulta base
     config = {
         'user': 'root',
         'password': 'root',
@@ -66,6 +116,21 @@ def request_prom():
     }
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
+
+
+    sql = "INSERT INTO promethes (cont_id, cont_name, cpu_name, cpu_usage, mem_usage, bytes_rx, bytes_tx) VALUES (%s, %s,%s, %s,%s, %s,%s)"
+    val = []
+    for ins in insertions:
+        val.append(tuple(ins.values()))
+
+    mycursor.executemany(sql, val)
+
+    mydb.commit()
+
+    print(mycursor.rowcount, "was inserted.") 
+
+
+
     cursor.execute('SELECT * FROM prometheus')
     results = [{'timestamp' : "{}-{}-{} {}:{}:{}".format(\
                     timestamp.day, timestamp.month, timestamp.year, timestamp.hour, timestamp.minute,timestamp.second),\
@@ -81,15 +146,16 @@ def request_prom():
     cursor.close()
     connection.close()
 
-    return results """
+    return results
 
 
 @app.route('/')
 def index() -> str:
     #get jsons from prometheus server
-    return json.dumps({'request' : request_prom()})
+    insertions = []    
+    request_prom(insertions)
     #dump mysql
-    #return json.dumps({'cadvisor': cadvisordb()})
+    return json.dumps({'cadvisor': cadvisordb(insertions)})
 
 
 if __name__ == '__main__':
