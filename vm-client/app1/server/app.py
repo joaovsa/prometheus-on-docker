@@ -7,7 +7,7 @@ app.config['UPLOAD_FOLDER'] = './files/'
 @app.route('/', methods=['GET'])
 def get():
   try:
-    return send_file('tiny-puppy.jpg', attachment_filename='cute-dog.jpg')
+    return send_file('files/tiny-puppy.jpg', attachment_filename='cute-dog.jpg')
   except Exception as e:
     return str(e)
 
